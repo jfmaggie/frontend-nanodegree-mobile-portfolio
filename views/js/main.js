@@ -5,6 +5,8 @@ jank-free at 60 frames per second.
 There are two major issues in this code that lead to sub-60fps performance. Can
 you spot and fix both?
 
+remove un-necessary variable definition out of for loop. 
+shrink scope of iteration.
 
 Built into the code, you'll find a few instances of the User Timing API
 (window.performance), which will be console.log()ing frame rate data into the
@@ -470,12 +472,16 @@ var resizePizzas = function(size) {
     }
 
     // Iterates through pizza elements on the page and changes their widths
+    // Edit by MZ: remove variable out of for loop
+
     function changePizzaSizes(size) {
-        for (var i = 0; i < document.querySelectorAll(".randomPizzaContainer").length; i++) {
-            var dx = determineDx(document.querySelectorAll(".randomPizzaContainer")[i], size);
-            var newwidth = (document.querySelectorAll(".randomPizzaContainer")[i].offsetWidth + dx) + 'px';
-            document.querySelectorAll(".randomPizzaContainer")[i].style.width = newwidth;
-        }
+      var random_pizza_container = document.getElementsByClassName("randomPizzaContainer");
+      var dx = determineDx(random_pizza_container[0], size);
+      var newwidth = (random_pizza_container[0].offsetWidth + dx) + 'px';
+
+      for (var i = 0; i < random_pizza_container.length; i++) {
+          random_pizza_container[i].style.width = newwidth;
+      }
     }
 
     changePizzaSizes(size);
@@ -523,10 +529,13 @@ function updatePositions() {
     frame++;
     window.performance.mark("mark_start_frame");
 
-    var items = document.querySelectorAll('.mover');
+    var items = document.getElementsByClassName('mover');
+    // remove variable out of for loop and regard phase as array since only 5 elements.
+    var top = document.body.scrollTop / 1250;
+    var phase = [Math.sin(top), Math.sin(top + 1), Math.sin(top + 2), Math.sin(top + 3), Math.sin(top + 4)];
     for (var i = 0; i < items.length; i++) {
-        var phase = Math.sin((document.body.scrollTop / 1250) + (i % 5));
-        items[i].style.left = items[i].basicLeft + 100 * phase + 'px';
+        items[i].style.left = items[i].basicLeft + 100 * phase[i % 5] + 'px';
+        // console.log(phase[i % 5]);
     }
 
     // User Timing API to the rescue again. Seriously, it's worth learning.
@@ -546,7 +555,8 @@ window.addEventListener('scroll', updatePositions);
 document.addEventListener('DOMContentLoaded', function() {
     var cols = 8;
     var s = 256;
-    for (var i = 0; i < 200; i++) {
+    // Edit by MZ: resize the iteration scope by changing 200 to 50
+    for (var i = 0; i < 50; i++) {
         var elem = document.createElement('img');
         elem.className = 'mover';
         elem.src = "images/pizza.png";
