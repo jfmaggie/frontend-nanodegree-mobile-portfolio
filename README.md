@@ -1,7 +1,7 @@
 ## Website Performance Optimization portfolio project
 
 * Cameron's template portfolio. I worked on the website perfomance optimization. 
-* Check the link here to view the portfolio.
+* Check the link [here](http://jfmaggie.github.io/frontend-nanodegree-mobile-portfolio/) to view the portfolio.
 * Open dev tool in a brower to evaluate web perfomance.
 
 ####Changes based on original portfolio
